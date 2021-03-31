@@ -11,13 +11,12 @@ import webdrivertasks.page.PastebinHomePage;
 
 
 public class WebDriverPastebinHomePageTest {
-    SavedPasteBinPage savedPastebin;
-    WebDriver driver;
+    private SavedPasteBinPage savedPastebin;
+    private WebDriver driver;
     final String TITLE = "how to gain dominance among developers";
     final String CODE = "git config --global user.name  \"New Sheriff in Town\"\n" +
-                        "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
-                        "git push origin master --force";
-
+            "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
+            "git push origin master --force";
 
     @BeforeMethod(alwaysRun = true)
     public void browserSetup() {
@@ -33,7 +32,6 @@ public class WebDriverPastebinHomePageTest {
                 .selectExpirationTime()
                 .submitNewPaste();
     }
-
 
     @Test
     public void chekPastebinBrightItOnTask() {

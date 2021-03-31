@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SavedPasteBinPage {
-    WebDriver driver;
+  private WebDriver driver;
 
 
     public SavedPasteBinPage (WebDriver driver) {
