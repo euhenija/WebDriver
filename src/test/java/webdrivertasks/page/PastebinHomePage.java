@@ -11,8 +11,6 @@ public class PastebinHomePage {
     private static final String PASTEBIN_HOMEPAGE_URL = "https://pastebin.com/";
     private WebDriver driver;
 
-
-
     @FindBy(id = "postform-text")
     private WebElement inputTextArea;
 
@@ -34,7 +32,6 @@ public class PastebinHomePage {
     @FindBy(xpath = "//li[text()='Bash']")
     private WebElement selectBashFormat;
 
-
     public PastebinHomePage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -48,24 +45,23 @@ public class PastebinHomePage {
         return this;
     }
 
-
-    public PastebinHomePage inputTextInTextArea (String text){
+    public PastebinHomePage inputTextInTextArea(String text) {
         inputTextArea.sendKeys(text);
         return this;
     }
 
-    public PastebinHomePage inputTextInTitleArea (String title){
+    public PastebinHomePage inputTextInTitleArea(String title) {
         inputTitleArea.sendKeys(title);
         return this;
     }
 
-    public PastebinHomePage selectExpirationTime (){
+    public PastebinHomePage selectExpirationTime() {
         expirationDropdown.click();
         selectTenMinutesExpiration.click();
         return this;
     }
 
-    public PastebinHomePage selectSyntaxHighlighting(){
+    public PastebinHomePage selectSyntaxHighlighting() {
         textSyntaxHighlightDropdown.click();
         selectBashFormat.click();
         return this;

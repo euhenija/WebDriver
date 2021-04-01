@@ -19,7 +19,7 @@ public class WebDriverSetUp {
     }
 
     private static void setupDriver() {
-        switch (System.getProperty("driver")) {
+        switch (System.getenv("driver")) {
             case ("chrome"): {
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
