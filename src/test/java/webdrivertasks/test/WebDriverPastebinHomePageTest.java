@@ -43,6 +43,8 @@ public class WebDriverPastebinHomePageTest {
                 .inputTextInTitleArea(TITLE)
                 .submitNewPaste();
         Assert.assertTrue(savedPastebin.checkHeaderToTitleAccordance(TITLE));
+        Assert.assertTrue(savedPastebin.checkBashPropertyIsActive("//a[text()='Bash']"));
+        Assert.assertTrue(savedPastebin.checkPastedToDisplayedTextAccordance(CODE));
     }
 
     @AfterMethod(alwaysRun = true)
