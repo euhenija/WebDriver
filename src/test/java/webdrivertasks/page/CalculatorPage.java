@@ -4,13 +4,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import webdrivertasks.waitings.WebElementWaiting;
+import webdrivertasks.waitings.WebElementWaitingManager;
+
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForPresenceOfElementLocatedByXpath;
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForVisibilityOfWebElement;
 
 public class CalculatorPage {
     private WebDriver driver;
     private static final String EXTERNAL_IFRAME_XPATH = "//devsite-iframe/iframe";
-    private static final String FINAL_COST_LOCATOR = "//b[contains(text(),'Total Estimated Cost')]";
-    private static final String EXPANDED_DROPDOWN_XPATH = "//div[contains(@class,'clickable')]//div[contains(text(),'%s')]";
+    private static final String FINAL_COST_XPATH = "//b[contains(text(),'Total Estimated Cost')]";
+    private static final String EXPANDED_DROPDOWN_TEMPLATE_XPATH = "//div[contains(@class,'clickable')]//div[contains(text(),'%s')]";
 
     @FindBy(xpath = "//md-input-container/input[contains(@ng-model,'quantity')]")
     private WebElement numberOfInstancesInputArea;
@@ -63,52 +66,56 @@ public class CalculatorPage {
     }
 
     public CalculatorPage inputNumberOfInstances(String numberOfInstances) {
-        WebElementWaiting.waitForPresenceOfElement(driver, EXTERNAL_IFRAME_XPATH);
-        driver.switchTo().frame(0);
-        driver.switchTo().frame(0);
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, numberOfInstancesInputArea);
+        switchToInternalFrame();
+        waitForVisibilityOfWebElement(numberOfInstancesInputArea);
         numberOfInstancesInputArea.click();
         numberOfInstancesInputArea.sendKeys(numberOfInstances);
         return this;
     }
 
+    private void switchToInternalFrame() {
+        waitForPresenceOfElementLocatedByXpath(EXTERNAL_IFRAME_XPATH);
+        driver.switchTo().frame(0);
+        driver.switchTo().frame(0);
+    }
+
     public CalculatorPage selectOperatingSystem(String operationSystem) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, operatingSystemDropDown);
+        waitForVisibilityOfWebElement(operatingSystemDropDown);
         operatingSystemDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, operationSystem).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, operationSystem)).click();
         return this;
     }
 
     public CalculatorPage selectMachineClass(String machineClass) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, machineClassDropDown);
+        waitForVisibilityOfWebElement(machineClassDropDown);
         machineClassDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, machineClass).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, machineClass)).click();
         return this;
     }
 
     public CalculatorPage selectMachineType(String machineType) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, machineTypeDropDown);
+        waitForVisibilityOfWebElement(machineTypeDropDown);
         machineTypeDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, machineType).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, machineType)).click();
         return this;
     }
 
     public CalculatorPage selectDatacenterLocation(String dataCenterLocation) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, dataCenterLocationDropDown);
+        waitForVisibilityOfWebElement(dataCenterLocationDropDown);
         dataCenterLocationDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, dataCenterLocation).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, dataCenterLocation)).click();
         return this;
     }
 
     public CalculatorPage selectMachineCommitedUsage(String committedUsage) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, machineCommitedUsageDropDown);
+        waitForVisibilityOfWebElement(machineCommitedUsageDropDown);
         machineCommitedUsageDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, committedUsage).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, committedUsage)).click();
         return this;
     }
 
     public CalculatorPage inputNumberOfNodes(String numberOfNodes) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, numberOfNodesInputArea);
+        waitForVisibilityOfWebElement(numberOfNodesInputArea);
         numberOfNodesInputArea.click();
         numberOfNodesInputArea.sendKeys(numberOfNodes);
         addGPUCheckbox.click();
@@ -116,48 +123,48 @@ public class CalculatorPage {
     }
 
     public CalculatorPage selectNumberOfGPUs(String numberOfGPUs) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, numberOfGPUDropDown);
+        waitForVisibilityOfWebElement(numberOfGPUDropDown);
         numberOfGPUDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, numberOfGPUs).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, numberOfGPUs)).click();
         return this;
     }
 
     public CalculatorPage selectLocalSSD(String localSSD) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, localSSDDropDown);
+        waitForVisibilityOfWebElement(localSSDDropDown);
         localSSDDropDown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, localSSD).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, localSSD)).click();
         return this;
     }
 
     public CalculatorPage selectNodeCommitedUsage(String committedUsage) {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, nodeCommitedUsageDropdown);
+        waitForVisibilityOfWebElement(nodeCommitedUsageDropdown);
         nodeCommitedUsageDropdown.click();
-        WebElementWaiting.waitElementFromDropDown(driver, EXPANDED_DROPDOWN_XPATH, committedUsage).click();
+        waitForPresenceOfElementLocatedByXpath(String.format(EXPANDED_DROPDOWN_TEMPLATE_XPATH, committedUsage)).click();
         return this;
     }
 
     public CalculatorPage computeEngineCost() {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, machineAddEstimationButton);
+        waitForVisibilityOfWebElement(machineAddEstimationButton);
         machineAddEstimationButton.click();
         return this;
     }
 
     public CalculatorPage computeNodesCost() {
-        WebElementWaiting.waitForVisibilityOfWebElement(driver, nodeAddEstimationButton);
+        waitForVisibilityOfWebElement(nodeAddEstimationButton);
         nodeAddEstimationButton.click();
         return this;
     }
 
     public boolean checkTotalEstimatedCost(String estimatedCost) {
-        return WebElementWaiting.waitForPresenceOfElement(driver, FINAL_COST_LOCATOR).getText().contains(estimatedCost);
+        return waitForPresenceOfElementLocatedByXpath(FINAL_COST_XPATH).getText().contains(estimatedCost);
     }
 
     public boolean checkMachineClass(String machineClass) {
-        return WebElementWaiting.waitForVisibilityOfWebElement(driver, currentMachineClass).getText().toLowerCase().contains(machineClass.toLowerCase());
+        return waitForVisibilityOfWebElement(currentMachineClass).getText().toLowerCase().contains(machineClass.toLowerCase());
     }
 
     public boolean checkInstanceType(String instanceType) {
-        return WebElementWaiting.waitForVisibilityOfWebElement(driver, currentInstanceType).getText().toLowerCase().contains(instanceType.toLowerCase());
+        return waitForVisibilityOfWebElement(currentInstanceType).getText().toLowerCase().contains(instanceType.toLowerCase());
     }
 
 }
