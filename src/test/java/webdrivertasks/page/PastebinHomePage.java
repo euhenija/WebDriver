@@ -4,8 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForVisibilityOfAllWebElementsOnThePage;
 
 public class PastebinHomePage {
     private static final String PASTEBIN_HOMEPAGE_URL = "https://pastebin.com/";
@@ -40,8 +40,7 @@ public class PastebinHomePage {
     public PastebinHomePage openPage() {
         this.driver.get(PASTEBIN_HOMEPAGE_URL);
         this.driver.manage().window().maximize();
-        new WebDriverWait(this.driver, 20)
-                .until(ExpectedConditions.visibilityOfAllElements(inputTextArea, inputTitleArea, pasteNewPasteButton, expirationDropdown));
+        waitForVisibilityOfAllWebElementsOnThePage(inputTextArea, inputTitleArea, pasteNewPasteButton, expirationDropdown);
         return this;
     }
 
