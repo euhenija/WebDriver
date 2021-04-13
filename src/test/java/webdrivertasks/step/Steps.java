@@ -1,13 +1,17 @@
 package webdrivertasks.step;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import webdrivertasks.page.CalculatorPage;
-import webdrivertasks.page.CalculatorSearchResultsPage;
 import webdrivertasks.page.GoogleCloudHomePage;
+import webdrivertasks.page.TenMinuteMailPage;
+
+import java.util.ArrayList;
 
 public class Steps {
     private WebDriver driver;
     private CalculatorPage calculatorPage;
+    private TenMinuteMailPage tenMinuteMailPage;
     private final String OPERATION_SYSTEM = "Free: Debian, CentOS, CoreOS, Ubuntu, or other User Provided OS";
     private final String MACHINE_CLASS = "Regular";
     private final String MACHINE_TYPE = "e2-standard-8";
@@ -17,42 +21,94 @@ public class Steps {
     public static final String NUMBER_OF_INSTANCES = "4";
     public static final String NUMBER_OF_NODES = "1";
     public static final String NUMBER_OF_GPUS = "4";
+    private final String TEN_MINUTE_MAIL_PAGE_LINK = "window.open('https://10minutemail.com/','_blank');";
+    private ArrayList<String> tabs;
+    private String email;
 
     public Steps(WebDriver driver) {
         this.driver = driver;
     }
 
-    public CalculatorPage goToCalculatorPage() {
-        return new GoogleCloudHomePage(driver)
+    public Steps goToCalculatorPage() {
+        new GoogleCloudHomePage(driver)
                 .openPage()
                 .pasteAndSearch("Google Cloud Platform Pricing Calculator")
                 .searchAskedCalculator()
                 .goToCalculatorPage();
+        return this;
     }
 
-    public CalculatorPage selectEngineProperties() {
-        calculatorPage = new CalculatorPage(driver);
-        return calculatorPage
+    public Steps selectEngineProperties() {
+        calculatorPage = new CalculatorPage(driver)
+                .clickMessageButton()
                 .inputNumberOfInstances(NUMBER_OF_INSTANCES)
                 .selectOperatingSystem(OPERATION_SYSTEM)
                 .selectMachineClass(MACHINE_CLASS)
                 .selectMachineType(MACHINE_TYPE)
                 .selectDatacenterLocation(DATACENTER_LOCATION)
                 .selectMachineCommitedUsage(COMMITTED_USAGE);
+        return this;
     }
 
-    public CalculatorPage selectNodeProperties() {
-        return calculatorPage
+    public Steps startFromCalculatorPage() {
+        calculatorPage = new CalculatorPage(driver)
+                .openCalculatorPage()
+                .clickMessageButton()
+                .inputNumberOfInstances(NUMBER_OF_INSTANCES)
+                .selectOperatingSystem(OPERATION_SYSTEM)
+                .selectMachineClass(MACHINE_CLASS)
+                .selectMachineType(MACHINE_TYPE)
+                .selectDatacenterLocation(DATACENTER_LOCATION)
+                .selectMachineCommitedUsage(COMMITTED_USAGE);
+        return this;
+    }
+
+    public Steps selectNodeProperties() {
+        calculatorPage
                 .inputNumberOfNodes(NUMBER_OF_NODES)
                 .selectNumberOfGPUs(NUMBER_OF_GPUS)
                 .selectLocalSSD(LOCAL_SSD)
                 .selectNodeCommitedUsage(COMMITTED_USAGE);
+        return this;
     }
 
-    public CalculatorPage calculateTotalCost() {
-        return calculatorPage
+    public CalculatorPage estimateTotalCost() {
+        calculatorPage
                 .computeEngineCost()
                 .computeNodesCost();
+        return calculatorPage;
+    }
+
+    public Steps estimateTotalCostToCompareOneFromEmail() {
+        calculatorPage
+                .computeEngineCost()
+                .computeNodesCost();
+        return this;
+    }
+
+    public Steps sendEmail() {
+        tenMinuteMailPage = new TenMinuteMailPage(driver);
+        email = tenMinuteMailPage.copyEmail();
+        driver.switchTo().window(tabs.get(0));
+        calculatorPage
+                .clickToEstimateEmail()
+                .pasteEmail(email)
+                .clickButtonToSendEmail();
+        return this;
+    }
+
+    public Steps openNewTenMinuteMailPageAndSwitchIt() {
+        ((JavascriptExecutor) driver).executeScript(TEN_MINUTE_MAIL_PAGE_LINK);
+        tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        return this;
+    }
+
+    public String getTotalCostFromEmail() {
+        driver.switchTo().window(tabs.get(1));
+        String emailResult = tenMinuteMailPage.openGoogleEmail().getEstimationCostInformationFromEmail();
+        driver.switchTo().window(tabs.get(0));
+        return emailResult;
     }
 
 }

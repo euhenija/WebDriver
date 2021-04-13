@@ -1,19 +1,22 @@
 package webdrivertasks.page;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import webdrivertasks.waitings.WebElementWaitingManager;
 
-import static webdrivertasks.waitings.WebElementWaitingManager.waitForPresenceOfElementLocatedByXpath;
-import static webdrivertasks.waitings.WebElementWaitingManager.waitForVisibilityOfWebElement;
+import static webdrivertasks.waitings.WebElementWaitingManager.*;
 
 public class CalculatorPage {
     private WebDriver driver;
     private static final String EXTERNAL_IFRAME_XPATH = "//devsite-iframe/iframe";
     private static final String FINAL_COST_XPATH = "//b[contains(text(),'Total Estimated Cost')]";
     private static final String EXPANDED_DROPDOWN_TEMPLATE_XPATH = "//div[contains(@class,'clickable')]//div[contains(text(),'%s')]";
+    private static final String GOOGLE_CALCULATOR_PAGE_URL = "https://cloud.google.com/products/calculator";
 
     @FindBy(xpath = "//md-input-container/input[contains(@ng-model,'quantity')]")
     private WebElement numberOfInstancesInputArea;
@@ -60,9 +63,33 @@ public class CalculatorPage {
     @FindBy(xpath = "//md-select[contains(@ng-model,'soleTenant.cud')]")
     private WebElement nodeCommitedUsageDropdown;
 
+    @FindBy(xpath = "//button[@class='devsite-snackbar-action']")
+    private WebElement googleMessageButton;
+
+    @FindBy(xpath = "//button[contains(@ng-click,'showEmailForm')]")
+    private WebElement emailEstimateButton;
+
+    @FindBy(xpath = "//input[@type='email']")
+    private WebElement emailInputArea;
+
+    @FindBy(xpath = "//button[contains(@ng-click,'emailQuote(true)')]")
+    private WebElement sendEmailButton;
+
     public CalculatorPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+    }
+
+    public CalculatorPage openCalculatorPage() {
+        this.driver.get(GOOGLE_CALCULATOR_PAGE_URL);
+        this.driver.manage().window().maximize();
+        return this;
+    }
+
+    public CalculatorPage clickMessageButton() {
+        waitForVisibilityOfWebElement(googleMessageButton);
+        googleMessageButton.click();
+        return this;
     }
 
     public CalculatorPage inputNumberOfInstances(String numberOfInstances) {
@@ -73,10 +100,11 @@ public class CalculatorPage {
         return this;
     }
 
-    private void switchToInternalFrame() {
+    public CalculatorPage switchToInternalFrame() {
         waitForPresenceOfElementLocatedByXpath(EXTERNAL_IFRAME_XPATH);
         driver.switchTo().frame(0);
         driver.switchTo().frame(0);
+        return this;
     }
 
     public CalculatorPage selectOperatingSystem(String operationSystem) {
@@ -152,6 +180,26 @@ public class CalculatorPage {
     public CalculatorPage computeNodesCost() {
         waitForVisibilityOfWebElement(nodeAddEstimationButton);
         nodeAddEstimationButton.click();
+        return this;
+    }
+
+    public CalculatorPage clickToEstimateEmail() {
+        switchToInternalFrame();
+        waitForVisibilityOfWebElement(emailEstimateButton);
+        emailEstimateButton.click();
+        return this;
+    }
+
+    public CalculatorPage pasteEmail(String email){
+        waitForVisibilityOfWebElement(emailInputArea);
+        emailInputArea.click();
+        emailInputArea.sendKeys(email);
+        return this;
+    }
+
+    public CalculatorPage clickButtonToSendEmail(){
+        waitForVisibilityOfWebElement(sendEmailButton);
+        sendEmailButton.click();
         return this;
     }
 
