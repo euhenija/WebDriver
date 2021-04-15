@@ -19,6 +19,7 @@ public class GoogleCloudTests {
     @BeforeClass(alwaysRun = true)
     public void browserSetup() {
         driver = WebDriverSetUp.getDriver();
+        this.driver.manage().window().maximize();
         step = new Steps(driver);
     }
 
@@ -43,7 +44,7 @@ public class GoogleCloudTests {
                 .sendEmail()
                 .getTotalCostFromEmail();
 
-        Assert.assertTrue(new CalculatorPage(driver).switchToInternalFrame().checkTotalEstimatedCost(totalCostFromEmail));
+       Assert.assertTrue(step.checkCostFromEmailAndCalculatorPageAreEqual(totalCostFromEmail));
     }
 
     @AfterClass(alwaysRun = true)

@@ -82,7 +82,6 @@ public class CalculatorPage {
 
     public CalculatorPage openCalculatorPage() {
         this.driver.get(GOOGLE_CALCULATOR_PAGE_URL);
-        this.driver.manage().window().maximize();
         return this;
     }
 

@@ -8,6 +8,8 @@ import webdrivertasks.page.TenMinuteMailPage;
 
 import java.util.ArrayList;
 
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForPresenceOfElementLocatedByXpath;
+
 public class Steps {
     private WebDriver driver;
     private CalculatorPage calculatorPage;
@@ -21,9 +23,10 @@ public class Steps {
     public static final String NUMBER_OF_INSTANCES = "4";
     public static final String NUMBER_OF_NODES = "1";
     public static final String NUMBER_OF_GPUS = "4";
-    private final String TEN_MINUTE_MAIL_PAGE_LINK = "window.open('https://10minutemail.com/','_blank');";
+    private final String TEN_MINUTE_MAIL_PAGE_OPENING_SCRIPT = "window.open('https://10minutemail.com/','_blank');";
     private ArrayList<String> tabs;
     private String email;
+    private static final String FINAL_COST_XPATH = "//b[contains(text(),'Total Estimated Cost')]";
 
     public Steps(WebDriver driver) {
         this.driver = driver;
@@ -98,7 +101,7 @@ public class Steps {
     }
 
     public Steps openNewTenMinuteMailPageAndSwitchIt() {
-        ((JavascriptExecutor) driver).executeScript(TEN_MINUTE_MAIL_PAGE_LINK);
+        ((JavascriptExecutor) driver).executeScript(TEN_MINUTE_MAIL_PAGE_OPENING_SCRIPT);
         tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         return this;
@@ -109,6 +112,11 @@ public class Steps {
         String emailResult = tenMinuteMailPage.openGoogleEmail().getEstimationCostInformationFromEmail();
         driver.switchTo().window(tabs.get(0));
         return emailResult;
+    }
+
+    public boolean checkCostFromEmailAndCalculatorPageAreEqual(String costFromEmail){
+        calculatorPage.switchToInternalFrame();
+        return waitForPresenceOfElementLocatedByXpath(FINAL_COST_XPATH).getText().contains(costFromEmail);
     }
 
 }

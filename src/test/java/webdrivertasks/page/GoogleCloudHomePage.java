@@ -28,7 +28,6 @@ public class GoogleCloudHomePage {
 
     public GoogleCloudHomePage openPage() {
         this.driver.get(GOOGLE_CLOUD_HOMEPAGE_URL);
-        this.driver.manage().window().maximize();
         waitForVisibilityOfWebElement(searchArea);
         return this;
     }
