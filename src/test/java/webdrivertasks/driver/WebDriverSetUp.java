@@ -31,7 +31,7 @@ public class WebDriverSetUp {
                 break;
             }
             default:
-                WebDriverManager.chromedriver().setup();
+                WebDriverManager.firefoxdriver().setup();
                 driver = new ChromeDriver();
         }
     }

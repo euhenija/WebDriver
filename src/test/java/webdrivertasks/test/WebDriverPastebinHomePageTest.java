@@ -46,7 +46,7 @@ public class WebDriverPastebinHomePageTest {
         Assert.assertTrue(savedPastebin.checkPastedToDisplayedTextAccordance(CODE));
     }
 
-    @AfterClass(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     public void quitBrowser() {
         driver.quit();
         driver = null;

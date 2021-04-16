@@ -1,10 +1,15 @@
 package webdrivertasks.page;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import webdrivertasks.waitings.WebElementWaitingManager;
+
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForElementIsClickable;
+import static webdrivertasks.waitings.WebElementWaitingManager.waitForVisibilityOfWebElement;
 
 public class GoogleCloudHomePage {
     private static final String GOOGLE_CLOUD_HOMEPAGE_URL = "https://cloud.google.com/";
@@ -23,8 +28,7 @@ public class GoogleCloudHomePage {
 
     public GoogleCloudHomePage openPage() {
         this.driver.get(GOOGLE_CLOUD_HOMEPAGE_URL);
-        this.driver.manage().window().maximize();
-        WebElementWaitingManager.waitForVisibilityOfWebElement(searchArea);
+        waitForVisibilityOfWebElement(searchArea);
         return this;
     }
 
@@ -35,7 +39,7 @@ public class GoogleCloudHomePage {
     }
 
     public CalculatorSearchResultsPage searchAskedCalculator(){
-        WebElementWaitingManager.waitForElementIsClickable(searchSubmitButton);
+        waitForElementIsClickable(searchSubmitButton);
         searchSubmitButton.click();
         return new CalculatorSearchResultsPage(driver);
     }

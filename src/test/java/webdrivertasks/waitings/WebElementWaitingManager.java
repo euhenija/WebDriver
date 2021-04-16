@@ -8,7 +8,7 @@ import webdrivertasks.driver.WebDriverSetUp;
 
 public class WebElementWaitingManager {
 
-    private static final int DEFAULT_WAIT_TIMEOUT_SECONDS = 20;
+    private static final int DEFAULT_WAIT_TIMEOUT_SECONDS = 30;
 
     private WebElementWaitingManager() {
     }
@@ -26,6 +26,11 @@ public class WebElementWaitingManager {
     public static WebElement waitForPresenceOfElementLocatedByXpath(String xpathLocator) {
         return new WebDriverWait(WebDriverSetUp.getDriver(), DEFAULT_WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathLocator)));
+    }
+
+    public static WebElement waitForVisibilityOfElementLocatedByXpath(String xpathLocator) {
+        return new WebDriverWait(WebDriverSetUp.getDriver(), DEFAULT_WAIT_TIMEOUT_SECONDS)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathLocator)));
     }
 
     public static void waitForVisibilityOfAllWebElementsOnThePage(WebElement... webElements) {
